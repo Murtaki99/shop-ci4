@@ -27,45 +27,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>murtakibangko@gmail.com</td>
-                            <td>Admin</td>
-                            <td>
-                                <div class="dropdown">
-                                    <button
-                                        type="button"
-                                        class="btn btn-danger btn-sm dropdown-toggle"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false">
-                                        Opsi
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">Ganti Role</a></li>
-                                        <li><a class="dropdown-item" href="#">Edit</a></li>
-                                        <li><a class="dropdown-item" href="#">Hapus</a></li>
-                                    </ul>
-                                </div>
-                            </td>
-                        </tr>
+                        <?php foreach ($categories as $category): ?>
+                            <tr>
+                                <td><?= $category['name'] ?></td>
+                                <td><?= $category['slug'] ?></td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button
+                                            type="button"
+                                            class="btn btn-danger btn-sm dropdown-toggle"
+                                            data-toggle="dropdown"
+                                            aria-expanded="false">
+                                            Opsi
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="<?= base_url('/categories/edit/' . $category['slug']) ?>">Edit</a></li>
+                                            <li>
+                                                <?= btn_delete(base_url('categories/delete/' . $category['slug']), 'Hapus Kategori', $category['name']) ?>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
-
-                <!-- <form>
-                            <div class="form-group">
-                                <label for="email">E-mail</label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan E-mail">
-                                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Kata Sandi</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan Password">
-                            </div>
-                            <div class="float-right">
-                                <button type="submit" class="btn btn-primary">Login 
-                                    <i class="fas fa-sign-in-alt"></i>
-                                </button>
-                            </div>
-                        </form> -->
             </div>
         </div>
     </div>

@@ -20,5 +20,7 @@ $routes->group('categories', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', [CategoryController::class, 'index']);
     $routes->get('create', [CategoryController::class, 'create']);
     $routes->post('store', [CategoryController::class, 'store']);
-    $routes->post('edit/', [CategoryController::class, 'edit']);
+    $routes->get('edit/(:segment)', [CategoryController::class, 'edit']);
+    $routes->post('update/(:segment)', [CategoryController::class, 'update']);
+    $routes->delete('delete/(:segment)', [CategoryController::class, 'destroy']);
 });

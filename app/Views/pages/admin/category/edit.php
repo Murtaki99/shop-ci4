@@ -12,7 +12,7 @@
                 <?= form_open($action, ['method' => 'POST']) ?>
                 <?= form_input(
                     name: 'title',
-                    value: old('title') ?? '',
+                    value: old('title') ?? $category['name'],
                     errors: session('errors.title') ?? '',
                     type: 'text',
                     ph: 'Masukkan nama kategori',
@@ -21,7 +21,7 @@
                 ) ?>
                 <?= form_input(
                     name: 'slug',
-                    value: old('slug') ?? '',
+                    value: old('slug') ?? $category['slug'],
                     errors: session('errors.slug') ?? '',
                     type: 'text',
                     ph: 'Slug',
