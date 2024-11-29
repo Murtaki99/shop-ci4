@@ -24,10 +24,11 @@ class AdminProductController extends BaseController
     public function index()
     {
         $search = $this->request->getGet('search');
+        $this->product->select('products.*, categories.name as category')->join('categories', 'categories.id=products.category_id', 'left');
         if ($search) {
-            $products = $this->product->like('name', $search)->paginate(10);
+            $products = $this->product->like('products.name', $search)->paginate(10);
         } else {
-            $products = $this->product->orderBy('id', 'desc')->paginate(10);
+            $products = $this->product->orderBy('products.id', 'desc')->paginate(10);
         }
         $data = [
             'title' => 'Kelola Produk',
@@ -63,7 +64,7 @@ class AdminProductController extends BaseController
             'price'         => 'required|numeric',
             'stocks'        => 'required|numeric',
             'description'   => 'required|min_length[10]',
-            'image'         => 'permit_empty|max_size[image,2048]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png]',
+            'image'         => 'permit_empty|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png]|max_size[image,2048]',
         ]);
 
         if (!$this->validation->withRequest($this->request)->run()) {
@@ -121,7 +122,7 @@ class AdminProductController extends BaseController
             'price'         => 'required|numeric',
             'stocks'        => 'required|numeric',
             'description'   => 'required|min_length[10]',
-            'image'         => 'permit_empty|max_size[image,2048]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png]',
+            'image'         => 'permit_empty|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png]|max_size[image,2048]',
         ]);
 
         if (!$this->validation->withRequest($this->request)->run()) {

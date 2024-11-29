@@ -42,12 +42,73 @@ if (!function_exists('form_input')) {
     }
 }
 
+// if (!function_exists('form_select')) {
+//     /**
+//      * Generate a dynamic HTML select element
+//      *
+//      * @param string $name Nama atribut `name` untuk elemen select
+//      * @param array $options Pilihan dalam bentuk array ['value' => 'label']
+//      * @param mixed $selected Nilai yang dipilih (opsional)
+//      * @param string $title Label untuk select element
+//      * @param string $errors Pesan error jika ada
+//      * @param array $attributes Atribut tambahan untuk elemen select (opsional)
+//      * @return string HTML select element
+//      */
+//     function form_select(
+//         string $name = '',
+//         array $options = [],
+//         string $selected = '',
+//         string $title = '',
+//         string $errors = '',
+//         array $attributes = []
+//     ): string {
+//         $attrString = '';
+//         foreach ($attributes as $key => $val) {
+//             $attrString .= $key . '="' . htmlspecialchars($val, ENT_QUOTES) . '" ';
+//         }
+//         $errorClass = $errors ? 'is-invalid' : '';
+//         $html = '
+//             <div class="form-group">
+//                 <label for="' . htmlspecialchars($name, ENT_QUOTES) . '">' . htmlspecialchars($title, ENT_QUOTES) . '</label>
+//                 <select 
+//                     class="form-control ' . $errorClass . '" 
+//                     id="' . htmlspecialchars($name, ENT_QUOTES) . '" 
+//                     name="' . htmlspecialchars($name, ENT_QUOTES) . '" 
+//                     ' . $attrString . '>
+//                     <option value="">Pilih ' . htmlspecialchars($title, ENT_QUOTES) . '</option>
+//         ';
+
+//         // Populate options
+//         foreach ($options as $value => $label) {
+//             $isSelected = ($value == $selected) ? 'selected' : '';
+//             $html .= '<option value="' . htmlspecialchars($value, ENT_QUOTES) . '" ' . $isSelected . '>' . htmlspecialchars($label, ENT_QUOTES) . '</option>';
+//         }
+
+//         // Close the select tag
+//         $html .= '
+//                 </select>
+//         ';
+
+//         // Add error message if exists
+//         if ($errors) {
+//             $html .= '<small class="form-text text-danger">' . htmlspecialchars($errors, ENT_QUOTES) . '</small>';
+//         }
+
+//         // Close the div
+//         $html .= '
+//             </div>
+//         ';
+
+//         return $html;
+//     }
+// }
+
 if (!function_exists('form_select')) {
     /**
      * Generate a dynamic HTML select element
      *
      * @param string $name Nama atribut `name` untuk elemen select
-     * @param array $options Pilihan dalam bentuk array ['value' => 'label']
+     * @param array $options Pilihan dalam bentuk array ['value' => 'label'] atau [['value' => ..., 'label' => ...]]
      * @param mixed $selected Nilai yang dipilih (opsional)
      * @param string $title Label untuk select element
      * @param string $errors Pesan error jika ada
@@ -62,16 +123,16 @@ if (!function_exists('form_select')) {
         string $errors = '',
         array $attributes = []
     ): string {
-        // Build additional attributes
+        // Generate additional attributes string
         $attrString = '';
         foreach ($attributes as $key => $val) {
-            $attrString .= $key . '="' . htmlspecialchars($val, ENT_QUOTES) . '" ';
+            $attrString .= htmlspecialchars($key, ENT_QUOTES) . '="' . htmlspecialchars($val, ENT_QUOTES) . '" ';
         }
 
-        // Add error class if an error exists
+        // Error class for invalid input
         $errorClass = $errors ? 'is-invalid' : '';
 
-        // Start building the HTML
+        // Start building the select HTML
         $html = '
             <div class="form-group">
                 <label for="' . htmlspecialchars($name, ENT_QUOTES) . '">' . htmlspecialchars($title, ENT_QUOTES) . '</label>
@@ -83,26 +144,25 @@ if (!function_exists('form_select')) {
                     <option value="">Pilih ' . htmlspecialchars($title, ENT_QUOTES) . '</option>
         ';
 
-        // Populate options
-        foreach ($options as $value => $label) {
+        // Populate options dynamically
+        foreach ($options as $key => $option) {
+            // Handle both simple and complex option structures
+            $value = is_array($option) ? $option['value'] : $key;
+            $label = is_array($option) ? $option['label'] : $option;
             $isSelected = ($value == $selected) ? 'selected' : '';
             $html .= '<option value="' . htmlspecialchars($value, ENT_QUOTES) . '" ' . $isSelected . '>' . htmlspecialchars($label, ENT_QUOTES) . '</option>';
         }
 
         // Close the select tag
-        $html .= '
-                </select>
-        ';
+        $html .= '</select>';
 
         // Add error message if exists
         if ($errors) {
             $html .= '<small class="form-text text-danger">' . htmlspecialchars($errors, ENT_QUOTES) . '</small>';
         }
 
-        // Close the div
-        $html .= '
-            </div>
-        ';
+        // Close the form group
+        $html .= '</div>';
 
         return $html;
     }
@@ -152,5 +212,93 @@ if (!function_exists('form_text')) {
                 ' . ($errors ? '<small class="form-text text-danger">' . htmlspecialchars($errors, ENT_QUOTES) . '</small>' : '') . '
             </div>
         ';
+    }
+}
+
+// if (!function_exists('form_radio')) {
+//     /**
+//      * Generate a radio input group with options
+//      *
+//      * @param string $errors Error message to display
+//      * @param string $title Title or label for the group
+//      * @param array $options Array of radio options (name, id, value, title_option)
+//      * @return string Rendered HTML for the radio group
+//      */
+//     function form_radio(
+//         string $errors = '',
+//         string $title = '',
+//         array $options = []
+//     ): string {
+//         $html = '<div class="form-group">';
+//         $html .= '<label>' . htmlspecialchars($title, ENT_QUOTES) . '</label><br>';
+//         foreach ($options as $option) {
+//             $html .= '
+//                 <div class="form-check form-check-inline">
+//                     <input type="radio" 
+//                         name="' . htmlspecialchars($option['name'], ENT_QUOTES) . '" 
+//                         id="' . htmlspecialchars($option['id'], ENT_QUOTES) . '" 
+//                         class="form-check-input" 
+//                         value="' . htmlspecialchars($option['value'], ENT_QUOTES) . '">
+//                     <label for="' . htmlspecialchars($option['id'], ENT_QUOTES) . '" class="form-check-label">
+//                         ' . htmlspecialchars($option['title_option'], ENT_QUOTES) . '
+//                     </label>
+//                 </div>
+//             ';
+//         }
+//         if ($errors) {
+//             $html .= '<small class="form-text text-danger">' . htmlspecialchars($errors, ENT_QUOTES) . '</small>';
+//         }
+//         $html .= '</div>';
+
+//         return $html;
+//     }
+// }
+
+if (!function_exists('form_radio')) {
+    /**
+     * Generate a radio input group with options
+     *
+     * @param string $errors Error message to display
+     * @param string $title Title or label for the group
+     * @param array $options Array of radio options (name, id, value, title_option)
+     * @param mixed $selected Value of the selected option (for checking "checked" state)
+     * @return string Rendered HTML for the radio group
+     */
+    function form_radio(
+        string $errors = '',
+        string $title = '',
+        array $options = [],
+        string $selected = '' // Added $selected to handle the old value
+    ): string {
+        $html = '<div class="form-group">';
+        $html .= '<label>' . htmlspecialchars($title, ENT_QUOTES) . '</label><br>';
+
+        foreach ($options as $option) {
+            // Check if the current option value is selected
+            $isChecked = ($option['value'] == $selected) ? 'checked' : '';
+
+            $html .= '
+                <div class="form-check form-check-inline">
+                    <input type="radio" 
+                        name="' . htmlspecialchars($option['name'], ENT_QUOTES) . '" 
+                        id="' . htmlspecialchars($option['id'], ENT_QUOTES) . '" 
+                        class="form-check-input" 
+                        value="' . htmlspecialchars($option['value'], ENT_QUOTES) . '" 
+                        ' . $isChecked . '>
+                    <label for="' . htmlspecialchars($option['id'], ENT_QUOTES) . '" class="form-check-label">
+                        ' . htmlspecialchars($option['title_option'], ENT_QUOTES) . '
+                    </label>
+                </div>
+            ';
+        }
+
+        // Display error message if any
+        if ($errors) {
+            $html .= '<small class="form-text text-danger">' . htmlspecialchars($errors, ENT_QUOTES) . '</small>';
+        }
+
+        $html .= '</div>';
+
+        return $html;
     }
 }

@@ -9,6 +9,7 @@
          <ul class="dropdown-menu">
              <li><a class="dropdown-item" href="<?= base_url('/categories') ?>">Kategori</a></li>
              <li><a class="dropdown-item" href="<?= base_url('/products') ?>">Produk</a></li>
+             <li><a class="dropdown-item" href="<?= base_url('/users') ?>">Pengguna</a></li>
              <li><a class="dropdown-item" href="#">Order</a></li>
          </ul>
      </li>

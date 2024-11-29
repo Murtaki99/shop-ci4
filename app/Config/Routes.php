@@ -3,6 +3,7 @@
 use App\Controllers\LoginController;
 use App\Controllers\RegisterController;
 use CodeIgniter\Router\RouteCollection;
+use App\Controllers\AdminUserController;
 use App\Controllers\AdminProductController;
 use App\Controllers\AdminCategoryController;
 
@@ -33,4 +34,13 @@ $routes->group('products', ['filter' => 'auth'], function ($routes) {
     $routes->get('edit/(:segment)', [AdminProductController::class, 'edit']);
     $routes->post('update/(:segment)', [AdminProductController::class, 'update']);
     $routes->delete('delete/(:segment)', [AdminProductController::class, 'destroy']);
+});
+
+$routes->group('users', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', [AdminUserController::class, 'index']);
+    $routes->get('create', [AdminUserController::class, 'create']);
+    $routes->post('store', [AdminUserController::class, 'store']);
+    $routes->get('edit/(:segment)', [AdminUserController::class, 'edit']);
+    $routes->post('update/(:segment)', [AdminUserController::class, 'update']);
+    $routes->delete('delete/(:segment)', [AdminUserController::class, 'destroy']);
 });

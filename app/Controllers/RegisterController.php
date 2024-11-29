@@ -2,19 +2,19 @@
 
 namespace App\Controllers;
 
-use App\Models\UserModel;
-use CodeIgniter\Controller;
+use App\Models\User;
+use Config\Services;
 
 class RegisterController extends BaseController
 {
-    protected $userModel;
+    protected $user;
     protected $validation;
 
     public function __construct()
     {
-        // Inisialisasi UserModel
-        $this->userModel = new UserModel();
-        $this->validation = \Config\Services::validation(); // Initialize validation service
+        // Inisialisasi use$user
+        $this->user = new User();
+        $this->validation = Services::validation();
     }
 
     // Menampilkan Form Pendaftaran
@@ -31,7 +31,7 @@ class RegisterController extends BaseController
         $this->validation->setRules([
             'name' => 'required|min_length[3]|max_length[255]',
             'email' => 'required|valid_email|is_unique[users.email]',
-            'password' => 'required|min_length[4]',
+            'password' => 'required|min_length[8]',
             'password_confirmation' => 'matches[password]',
         ]);
         if (!$this->validation->withRequest($this->request)->run()) {
@@ -42,9 +42,9 @@ class RegisterController extends BaseController
             'email' => $this->request->getPost('email'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
         ];
-        if ($this->userModel->save($userData)) {
-            $userId = $this->userModel->insertID();
-            $user = $this->userModel->find($userId);
+        if ($this->user->save($userData)) {
+            $userId = $this->user->insertID();
+            $user = $this->user->find($userId);
             session()->set([
                 'user_id' => $user['id'],
                 'user_name' => $user['name'],
