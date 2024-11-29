@@ -8,7 +8,7 @@
          </a>
          <ul class="dropdown-menu">
              <li><a class="dropdown-item" href="<?= base_url('/categories') ?>">Kategori</a></li>
-             <li><a class="dropdown-item" href="#">Produk</a></li>
+             <li><a class="dropdown-item" href="<?= base_url('/products') ?>">Produk</a></li>
              <li><a class="dropdown-item" href="#">Order</a></li>
          </ul>
      </li>

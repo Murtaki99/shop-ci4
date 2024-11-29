@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/css/lightbox.css" rel="stylesheet">
     <title>Olshop | <?= isset($title) ? $title : '' ?></title>
 </head>
 
@@ -17,6 +18,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/js/lightbox.min.js"></script>
     <script src="<?= base_url('js/slug.js') ?>"></script>
     <?php if (session()->getFlashdata('success')) : ?>
         <script>
@@ -35,20 +37,6 @@
             });
         </script>
     <?php endif; ?>
-    <!-- <script>
-        function deleteConfirmed(deleteUrl, title) {
-            swal({
-                    title: "Apakah Anda yakin?",
-                    text: `Data ${title} akan dihapus secara permanen.`,
-                    icon: "warning",
-                    buttons: ["Batal", "Hapus"],
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-
-                });
-        }
-    </script> -->
 </body>
 
 </html>

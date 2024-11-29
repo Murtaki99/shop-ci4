@@ -10,30 +10,62 @@ class Products extends Migration
     {
         // Creating the table
         $this->forge->addField([
-            'id'          => [
+            'id'            => [
                 'type'           => 'INT',
                 'constraint'     => 11,
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'name'        => [
+
+            'name'          => [
                 'type'           => 'VARCHAR',
                 'constraint'     => 255,
                 'collation'      => 'utf8mb4_general_ci',
             ],
-            'slug'        => [
+
+            'slug'          => [
                 'type'           => 'VARCHAR',
                 'constraint'     => 255,
                 'collation'      => 'utf8mb4_general_ci',
                 'unique'         => true,
             ],
-            'created_at'  => [
-                'type'           => 'DATETIME',
-                'null'           => null
+
+            'category_id'   => [
+                'type'           => 'INT',
+                'constraint'     => 11,
+                'unsigned'       => TRUE,
             ],
-            'updated_at'  => [
+
+            'description'   => [
+                'type'           => 'TEXT',
+                'null'           => true
+            ],
+
+            'price'         => [
+                'type'           => 'INT',
+                'constraint'     => 11,
+            ],
+
+            'stocks'         => [
+                'type'           => 'INT',
+                'constraint'     => 11,
+                'default'        => 1
+            ],
+
+            'image'         => [
+                'type'           => 'VARCHAR',
+                'constraint'     => 255,
+                'default'        => null
+            ],
+
+            'created_at'    => [
                 'type'           => 'DATETIME',
-                'null'           => null
+                'default'         => null
+            ],
+
+            'updated_at'    => [
+                'type'           => 'DATETIME',
+                'default'        => null
             ]
         ]);
 

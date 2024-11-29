@@ -2,26 +2,34 @@
 
 namespace App\Controllers;
 
-use App\Controllers\BaseController;
+use Config\Services;
 use App\Models\Category;
+use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class CategoryController extends BaseController
-{
 
+class AdminCategoryController extends BaseController
+{
     protected $validation;
     protected $category;
 
     public function __construct()
     {
         $this->category = new Category();
-        $this->validation = \Config\Services::validation();
+        $this->validation = Services::validation();
     }
     public function index()
     {
+        $search = $this->request->getGet('search');
+        if ($search) {
+            $categories = $this->category->like('name', $search)->paginate(10);
+        } else {
+            $categories = $this->category->orderBy('id', 'desc')->paginate(10);
+        }
         $data = [
             'title' => 'Kelola Kategori',
-            'categories' => $this->category->orderBy('id', 'desc')->paginate(10),
+            'categories' => $categories,
+            'pager' => $this->category->pager,
         ];
         return view('pages/admin/category/index', $data);
     }
@@ -83,12 +91,12 @@ class CategoryController extends BaseController
         if (!$this->validation->withRequest($this->request)->run()) {
             return redirect()->back()->withInput()->with('errors', $this->validation->getErrors());
         }
-        $update = [
+        $updateCategory = [
             'id'    => $category['id'],
             'name'  => $this->request->getPost('title'),
             'slug'  => $this->request->getPost('slug'),
         ];
-        if ($this->category->save($update)) {
+        if ($this->category->save($updateCategory)) {
             session()->setFlashdata('success', 'Kategori berhasil diubah!');
             return redirect()->to('/categories');
         } else {

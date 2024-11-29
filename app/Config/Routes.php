@@ -1,9 +1,10 @@
 <?php
 
-use App\Controllers\CategoryController;
 use App\Controllers\LoginController;
 use App\Controllers\RegisterController;
 use CodeIgniter\Router\RouteCollection;
+use App\Controllers\AdminProductController;
+use App\Controllers\AdminCategoryController;
 
 /**
  * @var RouteCollection $routes
@@ -17,10 +18,19 @@ $routes->post('/register', [RegisterController::class, 'register']);
 $routes->post('/login', [LoginController::class, 'login']);
 
 $routes->group('categories', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', [CategoryController::class, 'index']);
-    $routes->get('create', [CategoryController::class, 'create']);
-    $routes->post('store', [CategoryController::class, 'store']);
-    $routes->get('edit/(:segment)', [CategoryController::class, 'edit']);
-    $routes->post('update/(:segment)', [CategoryController::class, 'update']);
-    $routes->delete('delete/(:segment)', [CategoryController::class, 'destroy']);
+    $routes->get('/', [AdminCategoryController::class, 'index']);
+    $routes->get('create', [AdminCategoryController::class, 'create']);
+    $routes->post('store', [AdminCategoryController::class, 'store']);
+    $routes->get('edit/(:segment)', [AdminCategoryController::class, 'edit']);
+    $routes->post('update/(:segment)', [AdminCategoryController::class, 'update']);
+    $routes->delete('delete/(:segment)', [AdminCategoryController::class, 'destroy']);
+});
+
+$routes->group('products', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', [AdminProductController::class, 'index']);
+    $routes->get('create', [AdminProductController::class, 'create']);
+    $routes->post('store', [AdminProductController::class, 'store']);
+    $routes->get('edit/(:segment)', [AdminProductController::class, 'edit']);
+    $routes->post('update/(:segment)', [AdminProductController::class, 'update']);
+    $routes->delete('delete/(:segment)', [AdminProductController::class, 'destroy']);
 });
