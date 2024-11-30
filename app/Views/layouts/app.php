@@ -7,11 +7,102 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.5/css/lightbox.css" rel="stylesheet">
-    <title>Olshop | <?= isset($title) ? $title : '' ?></title>
+    <title>Niaga <?= isset($title) ? '| ' . $title : '| Situs Jual beli online' ?></title>
+    <style>
+        .header-content {
+            margin-top: 8vh;
+        }
+
+        .carousel {
+            height: 30vh;
+            width: 100%;
+        }
+
+        .carousel .carousel-item img {
+            width: 100%;
+            height: 30vh;
+        }
+
+        .bg-green {
+            background-color: #00B140;
+            color: white;
+        }
+
+        .text-green {
+            color: #00B140;
+        }
+    </style>
 </head>
 
 <body>
     <?= $this->include('layouts/navbar') ?>
+    <div class="container header-content">
+        <?php if ($_SERVER['REQUEST_URI'] == '/'): ?>
+            <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="<?= base_url('img/img1.jpg') ?>" class="d-block rounded" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>First slide label</h5>
+                            <p>Some representative placeholder content for the first slide.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="<?= base_url('img/img2.jpg') ?>" class="d-block rounded" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>Second slide label</h5>
+                            <p>Some representative placeholder content for the second slide.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="<?= base_url('img/img3.png') ?>" class="d-block rounded" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>Third slide label</h5>
+                            <p>Some representative placeholder content for the third slide.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="<?= base_url('img/img4.jpg') ?>" class="d-block rounded" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>Third slide label</h5>
+                            <p>Some representative placeholder content for the third slide.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="<?= base_url('img/img5.jpg') ?>" class="d-block rounded" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>Third slide label</h5>
+                            <p>Some representative placeholder content for the third slide.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="<?= base_url('img/img9.avif') ?>" class="d-block rounded" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>Third slide label</h5>
+                            <p>Some representative placeholder content for the third slide.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-target="#carouselExampleCaptions" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-target="#carouselExampleCaptions" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </button>
+            </div>
+        <?php else: ?>
+            <div class="alert alert-success" role="alert">
+                This is a success alert—check it out!
+            </div>
+        <?php endif; ?>
+    </div>
     <main class="container my-5">
         <?= $this->renderSection('content'); ?>
     </main>

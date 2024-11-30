@@ -2,28 +2,45 @@
 
 namespace App\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 
 class HomeController extends BaseController
 {
     protected $product;
+    protected $category;
 
     public function __construct()
     {
         $this->product = new Product();
+        $this->category = new Category();
     }
     public function index(): string
     {
-        $search = $this->request->getGet('search');
-        $this->product->select('products.*, categories.name as category')->join('categories', 'categories.id=products.category_id', 'left');
-        if ($search) {
-            $products = $this->product->like('products.name', $search)->paginate(6);
-        } else {
-            $products = $this->product->orderBy('products.id', 'desc')->paginate(6);
+        $search     = $this->request->getGet('search');
+        $short      = $this->request->getGet('short');
+        $category   = $this->request->getGet('category');
+        $categories = $this->category->findAll();
+        $this->product->select('products.*, categories.name as category')
+            ->join('categories', 'categories.id=products.category_id', 'left');
+        if ($category) {
+            $this->product->where('categories.slug', $category);
         }
+        if ($search) {
+            $this->product->like('products.name', $search);
+        }
+        if ($short == 'termurah') {
+            $this->product->orderBy('products.price', 'asc');
+        } elseif ($short == 'termahal') {
+            $this->product->orderBy('products.price', 'desc');
+        } else {
+            $this->product->orderBy('products.id', 'desc');
+        }
+        $products = $this->product->paginate(6);
         $data = [
-            'title' => 'Kelola Produk',
             'products' => $products,
+            'categories' => $categories,
+            'currentCategory' => $category,
             'pager' => $this->product->pager,
         ];
         return view('pages/home/index', $data);

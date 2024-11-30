@@ -17,7 +17,7 @@ if (!function_exists('search')) {
         <form class="input-group flex-nowrap" method="GET" action="' . esc(base_url($url)) . '">
             <input type="search" class="form-control form-control-sm" name="search" id="search" placeholder="Cari..." value="' . (isset($_GET['search']) ? esc($_GET['search']) : '') . '">
             <div class="input-group-prepend">
-                <button type="submit" class="btn btn-primary btn-sm" id="addon-wrapping">
+                <button type="submit" class="btn bg-green text-white btn-sm" id="addon-wrapping">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
@@ -54,12 +54,11 @@ if (!function_exists('card')) {
         string $img = null,
         string $category = '',
         int $count = 0,
-        string $description = ''
     ): string {
         // Base URL for product images
         $imgUrl = !empty($img)
             ? base_url('storage/products/' . $img)
-            : 'https://placehold.co/420x400';
+            : 'https://placehold.co/565x600';
 
         // Card HTML structure
         return '
@@ -68,11 +67,10 @@ if (!function_exists('card')) {
                     <img src="' . esc($imgUrl) . '" alt="' . esc($name) . '" class="card-img-top" style="width: 100%; height:25vh;" />
                 </a>
                 <div class="card-body">
-                    <h4 class="card-title">' . esc($name) . '</h4>
+                    <h3 class="card-title mb-0">' . esc($name) . '</h3>
                     <p class="card-text mb-0">' . esc(rp($price)) . '</p>
-                    <p class="card-text mb-0">' . esc(str_limit($description, 25, '...')) . '</p>
                     <span class="badge badge-primary badge-pill"><i class="fas fa-tag"></i> ' . esc($category) . '</span>
-                    <span class="badge badge-success badge-pill"> Tersisa ' . esc($count) . ' Items</span>
+                    <span class="badge badge-success badge-pill"> Tersisa ' . esc($count) . ' Item</span>
                 </div>
             </div>
         ';
@@ -94,39 +92,39 @@ if (!function_exists('modal_show')) {
             : 'https://placehold.co/420x400';
         return '
             <div class="modal fade" id="show-' . $idProduct . '" data-keyboard="false">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Detail Produk</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6">
-                            <img src="' . esc($imgUrl) . '" alt="' . esc($name) . '" class="card-img-top" />
-                    </div>
-                    <div class="col-md-6">
-                        <h2 class="card-tite">' . esc($name) . '</h2>
-                        <p class="card-text mb-0">' . esc(rp($price)) . '</p>
-                        <p class="card-text mb-0">' . esc(str_limit($description, 25, '...')) . '</p>
-                        <span href="" class="badge badge-primary"><i class="fas fa-tag"></i> ' . esc($category) . '</span> |
-                        <span>Tersisa <span class="badge badge-success badge-pill">' . esc($count) . '</span></span>
-                        <form class=" my-4 input-group flex-nowrap">
-                            <input type="search" class="form-control" name="search" id="search">
-                            <div class="input-group-prepend">
-                                <button type="submit" class="btn btn-primary" id="addon-wrapping">
-                                    <i class="fas fa-cart-plus"></i>
-                                </button>
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Detail Produk</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                        <img src="' . esc($imgUrl) . '" alt="' . esc($name) . '" class="card-img-top" />
+                                </div>
+                                <div class="col-md-6">
+                                    <h2 class="card-tite">' . esc($name) . '</h2>
+                                    <p class="card-text mb-0">' . esc(rp($price)) . '</p>
+                                    <p class="card-text mb-0">' . esc(str_limit($description, 25, '...')) . '</p>
+                                    <span href="" class="badge badge-primary"><i class="fas fa-tag"></i> ' . esc($category) . '</span>
+                                    <span class="badge badge-success badge-pill">Tersisa ' . esc($count) . ' Item</span>
+                                    <form class=" my-4 input-group flex-nowrap">
+                                        <input type="search" class="form-control" name="search" id="search">
+                                        <div class="input-group-prepend">
+                                            <button type="submit" class="btn btn-primary" id="addon-wrapping">
+                                                <i class="fas fa-cart-plus"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
         ';
     };
 }
