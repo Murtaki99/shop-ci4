@@ -21,149 +21,48 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="https://placehold.co/100x70" alt="" class="card-img-top">
-                </div>
-                <div class="card-body">
-                    <h5 class="card-tite">Nama Produk</h5>
-                    <p class="card-text mb-0">Rp. 100.000</p>
-                    <p class="card-text mb-0">Lorem ipsum dolor sit amet...</p>
-                    <a href="" class="badge badge-primary"><i class="fas fa-tag"></i> Kategori</a>
-                </div>
-                <div class="card-footer">
-                    <form class="input-group flex-nowrap">
-                        <input type="search" class="form-control" name="search" id="search">
-                        <div class="input-group-prepend">
-                            <button type="submit" class="btn btn-primary" id="addon-wrapping">
-                                <i class="fas fa-cart-plus"></i>
-                            </button>
+            <?php if ($products && count($products) > 0): ?>
+                <?php foreach ($products as $product): ?>
+                    <div class="col-md-4 mb-5">
+
+                        <?= card(
+                            idProduct: $product['id'],
+                            name: $product['name'],
+                            price: $product['price'],
+                            img: $product['image'],
+                            category: $product['category'],
+                            count: $product['stocks'],
+                            description: $product['description']
+                        ) ?>
+
+                        <?= modal_show(
+                            idProduct: $product['id'],
+                            name: $product['name'],
+                            price: $product['price'],
+                            img: $product['image'],
+                            category: $product['category'],
+                            count: $product['stocks'],
+                            description: $product['description']
+                        ) ?>
+                        
+                        <div class="card-footer">
+                            <form class="input-group flex-nowrap">
+                                <input type="search" class="form-control" name="search" id="search">
+                                <div class="input-group-prepend">
+                                    <button type="submit" class="btn btn-primary" id="addon-wrapping">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="https://placehold.co/100x70" alt="" class="card-img-top">
-                </div>
-                <div class="card-body">
-                    <h5 class="card-tite">Nama Produk</h5>
-                    <p class="card-text mb-0">Rp. 100.000</p>
-                    <p class="card-text mb-0">Lorem ipsum dolor sit amet...</p>
-                    <a href="" class="badge badge-primary"><i class="fas fa-tag"></i> Kategori</a>
-                </div>
-                <div class="card-footer">
-                    <form class="input-group flex-nowrap">
-                        <input type="search" class="form-control" name="search" id="search">
-                        <div class="input-group-prepend">
-                            <button type="submit" class="btn btn-primary" id="addon-wrapping">
-                                <i class="fas fa-cart-plus"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="https://placehold.co/100x70" alt="" class="card-img-top">
-                </div>
-                <div class="card-body">
-                    <h5 class="card-tite">Nama Produk</h5>
-                    <p class="card-text mb-0">Rp. 100.000</p>
-                    <p class="card-text mb-0">Lorem ipsum dolor sit amet...</p>
-                    <a href="" class="badge badge-primary"><i class="fas fa-tag"></i> Kategori</a>
-                </div>
-                <div class="card-footer">
-                    <form class="input-group flex-nowrap">
-                        <input type="search" class="form-control" name="search" id="search">
-                        <div class="input-group-prepend">
-                            <button type="submit" class="btn btn-primary" id="addon-wrapping">
-                                <i class="fas fa-cart-plus"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="https://placehold.co/100x70" alt="" class="card-img-top">
-                </div>
-                <div class="card-body">
-                    <h5 class="card-tite">Nama Produk</h5>
-                    <p class="card-text mb-0">Rp. 100.000</p>
-                    <p class="card-text mb-0">Lorem ipsum dolor sit amet...</p>
-                    <a href="" class="badge badge-primary"><i class="fas fa-tag"></i> Kategori</a>
-                </div>
-                <div class="card-footer">
-                    <form class="input-group flex-nowrap">
-                        <input type="search" class="form-control" name="search" id="search">
-                        <div class="input-group-prepend">
-                            <button type="submit" class="btn btn-primary" id="addon-wrapping">
-                                <i class="fas fa-cart-plus"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="https://placehold.co/100x70" alt="" class="card-img-top">
-                </div>
-                <div class="card-body">
-                    <h5 class="card-tite">Nama Produk</h5>
-                    <p class="card-text mb-0">Rp. 100.000</p>
-                    <p class="card-text mb-0">Lorem ipsum dolor sit amet...</p>
-                    <a href="" class="badge badge-primary"><i class="fas fa-tag"></i> Kategori</a>
-                </div>
-                <div class="card-footer">
-                    <form class="input-group flex-nowrap">
-                        <input type="search" class="form-control" name="search" id="search">
-                        <div class="input-group-prepend">
-                            <button type="submit" class="btn btn-primary" id="addon-wrapping">
-                                <i class="fas fa-cart-plus"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <img src="https://placehold.co/100x70" alt="" class="card-img-top">
-                </div>
-                <div class="card-body">
-                    <h5 class="card-tite">Nama Produk</h5>
-                    <p class="card-text mb-0">Rp. 100.000</p>
-                    <p class="card-text mb-0">Lorem ipsum dolor sit amet...</p>
-                    <a href="" class="badge badge-primary"><i class="fas fa-tag"></i> Kategori</a>
-                </div>
-                <div class="card-footer">
-                    <form class="input-group flex-nowrap">
-                        <input type="search" class="form-control" name="search" id="search">
-                        <div class="input-group-prepend">
-                            <button type="submit" class="btn btn-primary" id="addon-wrapping">
-                                <i class="fas fa-cart-plus"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif ?>
         </div>
         <div class="container">
-            <nav aria-label="...">
-                <ul class="pagination">
-                    <li class="page-item disabled">
-                        <a class="page-link">Previous</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active" aria-current="page">
-                        <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-            </nav>
+            <?php if ($products && count($products) >= 6): ?>
+                <?= $pager->links() ?>
+            <?php endif; ?>
         </div>
     </div>
     <div class="col-md-3">

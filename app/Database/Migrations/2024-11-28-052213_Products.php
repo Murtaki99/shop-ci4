@@ -68,11 +68,7 @@ class Products extends Migration
                 'default'        => null
             ]
         ]);
-
-        // Adding the primary key
-        $this->forge->addKey('id'); // True indicates primary key
-
-        // Create the table (replace 'products' with your actual table name)
+        $this->forge->addKey('id');
         $this->forge->createTable('products');
     }
 

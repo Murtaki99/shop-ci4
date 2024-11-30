@@ -1,7 +1,3 @@
-<?php
-
-use Kint\Zval\Value;
-?>
 <?= $this->extend('layouts/app'); ?>
 <?= $this->section('content'); ?>
 <div class="row">
@@ -45,32 +41,23 @@ use Kint\Zval\Value;
                     attributes: ['required' => 'required']
                 ) ?>
 
-                <?= form_select(
-                    name: 'role',
+                <?= form_radio(
                     title: 'Role',
-                    options: [['value' => 'admin', 'label' => 'Administrator'], ['value' => 'member', 'label' => 'Member']],
-                    selected: old('role') ?? '',
                     errors: session('errors.role') ?? '',
-                    attributes: ['class' => 'custom-class']
+                    selected: old('role') ?? '',
+                    options: [
+                        ['title_option' => 'Admin', 'value' => 'admin', 'name' => 'role', 'id' => 'admin'],
+                        ['title_option' => 'Member', 'value' => 'member', 'name' => 'role', 'id' => 'member']
+                    ]
                 ) ?>
 
                 <?= form_radio(
                     title: 'Status',
                     errors: session('errors.status') ?? '',
-                    selected: old('status') ?? '', // Mengambil nilai yang dipilih sebelumnya
+                    selected: old('status') ?? '',
                     options: [
-                        [
-                            'title_option' => 'Aktif',
-                            'value' => '1',
-                            'name' => 'status',
-                            'id' => 'active',
-                        ],
-                        [
-                            'title_option' => 'Tidak Aktif',
-                            'value' => '0',
-                            'name' => 'status',
-                            'id' => 'unactive',
-                        ]
+                        ['title_option' => 'Aktif', 'value' => '1', 'name' => 'status', 'id' => 'active'],
+                        ['title_option' => 'Tidak Aktif', 'value' => '0', 'name' => 'status', 'id' => 'unactive']
                     ]
                 ) ?>
 

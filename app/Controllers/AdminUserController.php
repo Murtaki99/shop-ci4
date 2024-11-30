@@ -70,12 +70,12 @@ class AdminUserController extends BaseController
         }
 
         $user = [
-            'name' => $this->request->getPost('name'),
-            'email' => $this->request->getPost('email'),
-            'password' => $this->request->getPost('password'),
-            'role' => $this->request->getPost('role'),
+            'name'      => $this->request->getPost('name'),
+            'email'     => $this->request->getPost('email'),
+            'password'  => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
+            'role'      => $this->request->getPost('role'),
             'is_active' => $this->request->getPost('status'),
-            'image' => $imageName,
+            'image'     => $imageName,
         ];
         if ($this->user->save($user)) {
             session()->setFlashdata('success', 'Pengguna baru berhasil disimpan!');
@@ -86,18 +86,70 @@ class AdminUserController extends BaseController
         }
     }
 
-    public function edit()
+    public function edit(int $id)
     {
-        // Show the form for editing the specified resource
+        $user = $this->user->where('id', $id)->first();
+        $data = [
+            'title'     => 'Tambah Pengguna',
+            'action'    => base_url("/users/update/{$user['id']}"),
+            'user'      => $user
+        ];
+        return view('pages/admin/user/edit', $data);
     }
 
-    public function update()
+    public function update(int $id)
     {
-        // Update the specified resource in storage
+        $user = $this->user->where('id', $id)->first();
+
+        $this->validation->setRules([
+            'name'          => 'required|max_length[255]',
+            'email'         => 'required|min_length[3]|max_length[255]|is_unique[users.email,id,' . $user['id'] . ']',
+            'role'          => 'required',
+            'status'        => 'required',
+            'image'         => 'permit_empty|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png]|max_size[image,2048]',
+        ]);
+
+        $imageName = $user['image'] ?? null;
+
+        $image = $this->request->getFile('image');
+        if ($image && $image->isValid() && !$image->hasMoved()) {
+            if (!empty($user['image']) && file_exists('storage/users/' . $user['image'])) {
+                unlink('storage/users/' . $user['image']);
+            }
+            $imageName = $image->getRandomName();
+            $image->move('storage/users', $imageName);
+        }
+
+        $updateUser = [
+            'id'        => $user['id'],
+            'name'      => $this->request->getPost('name'),
+            'email'     => $this->request->getPost('email'),
+            'role'      => $this->request->getPost('role'),
+            'is_active' => $this->request->getPost('status'),
+            'image'     => $imageName
+        ];
+        if ($this->user->save($updateUser)) {
+            session()->setFlashdata('success', 'Pengguna berhasil diubah!');
+            return redirect()->to('/users');
+        } else {
+            session()->setFlashdata('error', 'Pengguna gagal diubah');
+            return redirect()->to('/users/edit/' . $id);
+        }
     }
 
-    public function destroy()
+    public function destroy(int $id)
     {
-        // Remove the specified resource from storage
+        $user = $this->user->where('id', $id)->first();
+        if (!$user) {
+            return redirect()->back()->with('error', 'Pengguna tidak ditemukan');
+        }
+        if ($this->user->delete($user['id'])) {
+            if (!empty($user['image']) && file_exists('storage/users/' . $user['image'])) {
+                unlink('storage/users/' . $user['image']);
+            }
+            return redirect()->to('/users')->with('success', 'Pengguna berhasil dihapus!');
+        } else {
+            return redirect()->back()->with('error', 'Pengguna gagal dihapus!');
+        }
     }
 }

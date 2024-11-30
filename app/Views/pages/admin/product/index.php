@@ -70,7 +70,11 @@
                     </tbody>
 
                 </table>
-                <?= $pager->links() ?>
+                <div class="container">
+                    <?php if ($products && count($products) >= 10): ?>
+                        <?= $pager->links() ?>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </div>
