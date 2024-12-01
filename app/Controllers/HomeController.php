@@ -21,7 +21,7 @@ class HomeController extends BaseController
         $short      = $this->request->getGet('short');
         $category   = $this->request->getGet('category');
         $categories = $this->category->findAll();
-        $this->product->select('products.*, categories.name as category')
+        $this->product->select('products.*, categories.name as category_name, categories.slug as category_slug')
             ->join('categories', 'categories.id=products.category_id', 'left');
         if ($category) {
             $this->product->where('categories.slug', $category);
@@ -44,5 +44,24 @@ class HomeController extends BaseController
             'pager' => $this->product->pager,
         ];
         return view('pages/home/index', $data);
+    }
+
+    public function show(string $slug)
+    {
+        $product = $this->product
+            ->select('products.*, categories.name as category_name, categories.slug as category_slug')
+            ->join('categories', 'categories.id = products.category_id', 'left')
+            ->where('products.slug', $slug)
+            ->first();
+
+        if (!$product) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Produk tidak ditemukan.");
+        }
+
+        $data = [
+            'product' => $product,
+        ];
+
+        return view('pages/home/show', $data);
     }
 }

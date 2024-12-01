@@ -8,12 +8,12 @@
                     <div class="card-body">
                         <div class="row justify-content-between">
                             <div class="col-md-6 align-self-center mb-3 mb-md-0">
-                                Urutkan harga:
+                                <?= 'Urutkan harga:' ?>
                                 <a href="<?= base_url('/?short=termurah') ?>" class="badge badge-primary">
-                                    Termurah
+                                    <?= 'Termurah' ?>
                                 </a>
                                 <a href="<?= base_url('/?short=termahal') ?>" class="badge badge-primary">
-                                    Termahal
+                                    <?= 'Termahal' ?>
                                 </a>
                             </div>
                             <div class="col-md-6 align-self-center">
@@ -22,9 +22,9 @@
                         </div>
                     </div>
                 </div>
-                <p>Kategori :
+                <p><?= 'Kategori :' ?>
                     <?php if (empty($currentCategory)): ?>
-                        <span class="badge badge-primary badge-pill">Semua Kategori</span>
+                        <span class="badge badge-primary badge-pill"><?= 'Semua Kategori' ?></span>
                     <?php else: ?>
                         <span class="badge badge-success badge-pill">
                             <?php
@@ -48,30 +48,13 @@
                             name: $product['name'],
                             price: $product['price'],
                             img: $product['image'],
-                            category: $product['category'],
+                            category: $product['category_name'],
                             count: $product['stocks'],
-                            // description: $product['description']
+                            urlShow: base_url("product/" . $product['slug']),
+                            urlCategory: base_url('/?category=' . $product['category_slug']),
                         ) ?>
-
-                        <?= modal_show(
-                            idProduct: $product['id'],
-                            name: $product['name'],
-                            price: $product['price'],
-                            img: $product['image'],
-                            category: $product['category'],
-                            count: $product['stocks'],
-                            description: $product['description']
-                        ) ?>
-
                         <div class="card-footer">
-                            <form class="input-group flex-nowrap">
-                                <input type="search" class="form-control" name="search" id="search">
-                                <div class="input-group-prepend">
-                                    <button type="submit" class="btn btn-primary" id="addon-wrapping">
-                                        <i class="fas fa-cart-plus"></i>
-                                    </button>
-                                </div>
-                            </form>
+                            <?= add_cart(id: $product['id']) ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -86,11 +69,11 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        Kategori Produk
+                        <?= 'Kategori Produk' ?>
                     </div>
                     <div class="list-group">
                         <a href="<?= base_url('/') ?>" class="list-group-item list-group-item-action <?= empty($currentCategory) ? 'active' : '' ?>" aria-current="<?= empty($currentCategory) ? 'true' : 'false' ?>">
-                            Semua Kategori
+                            <?= 'Semua Kategori' ?>
                         </a>
                         <?php foreach ($categories as $category): ?>
                             <a href="<?= base_url('/?category=' . $category['slug']) ?>"

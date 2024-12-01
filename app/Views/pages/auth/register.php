@@ -7,45 +7,48 @@
                 <?= isset($title) ? $title : '' ?>
             </div>
             <div class="card-body">
-                <form method="POST" action="<?= site_url('register') ?>" enctype="multipart/form-data">
-                    <?= csrf_field() ?>
-                    <div class="form-group">
-                        <label for="name">Nama Lengkap</label>
-                        <input type="text" class="form-control <?= session('errors.name') ? 'is-invalid' : '' ?>" id="name" name="name" placeholder="Masukkan Nama Lengkap" value="<?= old('name') ?>">
-                        <small class="invalid-feedback">
-                            <?= session('errors.name') ?>
-                        </small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">E-Mail</label>
-                        <input type="email" class="form-control <?= session('errors.email') ? 'is-invalid' : '' ?>" id="email" name="email" placeholder="Masukkan E-Mail Valid" value="<?= old('email') ?>">
-                        <small class="invalid-feedback">
-                            <?= session('errors.email') ?>
-                        </small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password">Kata sandi</label>
-                        <input type="password" class="form-control <?= session('errors.password') ? 'is-invalid' : '' ?>" id="password" name="password" placeholder="Masukkan Kata Sandi">
-                        <small class="invalid-feedback">
-                            <?= session('errors.password') ?>
-                        </small>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password_confirmation">Konfirmasi kata sandi</label>
-                        <input type="password" class="form-control <?= session('errors.password_confirmation') ? 'is-invalid' : '' ?>" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi Kata Sandi">
-                        <small class="invalid-feedback">
-                            <?= session('errors.password_confirmation') ?>
-                        </small>
-                    </div>
-
-                    <div class="float-right">
-                        <button type="submit" class="btn btn-primary">Daftar Sekarang</button>
-                    </div>
-                </form>
-
+                <?= form_open($action, ['method' => 'POST']) ?>
+                <?= csrf_field() ?>
+                <?= form_input(
+                    title: 'Nama Lengkap',
+                    name: 'name',
+                    value: old('name') ?? '',
+                    errors: session('errors.name') ?? '',
+                    type: 'name',
+                    ph: 'Masukkan Nama Lengkap',
+                    attributes: ['required' => 'required']
+                ) ?>
+                <?= form_input(
+                    title: 'E-Mail',
+                    name: 'email',
+                    value: old('email') ?? '',
+                    errors: session('errors.email') ?? '',
+                    type: 'email',
+                    ph: 'Masukkan E-Mail Valid',
+                    attributes: ['required' => 'required']
+                ) ?>
+                <?= form_input(
+                    title: 'Kata Sandi',
+                    name: 'password',
+                    value: old('password') ?? '',
+                    errors: session('errors.password') ?? '',
+                    type: 'password',
+                    ph: 'Masukkan Kata sandi',
+                    attributes: ['required' => 'required']
+                ) ?>
+                <?= form_input(
+                    title: 'Konfirmasi Kata Sandi',
+                    name: 'password_confirmation',
+                    value: old('password_confirmation') ?? '',
+                    errors: session('errors.password_confirmation') ?? '',
+                    type: 'password',
+                    ph: 'Konfirmasi Kata sandi',
+                    attributes: ['required' => 'required']
+                ) ?>
+                <div class="float-right">
+                    <button type="submit" class="btn btn-primary"><?= 'Daftar Sekarang' ?></button>
+                </div>
+                <?= form_close() ?>
             </div>
         </div>
     </div>

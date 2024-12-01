@@ -1,4 +1,8 @@
 <?php
+
+use App\Models\User;
+use Config\Services;
+
 if (!function_exists('no')) {
     function no($pager, $index)
     {
@@ -48,12 +52,15 @@ if (!function_exists('str_limit')) {
 
 if (!function_exists('card')) {
     function card(
-        string $idProduct = '',
-        string $name = '',
-        int $price = 0,
-        string $img = null,
-        string $category = '',
-        int $count = 0,
+        string  $idProduct = '',
+        string  $name = '',
+        int     $price = 0,
+        string  $img = null,
+        string  $category = '',
+        int     $count = 0,
+        string  $urlCategory = '#',
+        string  $urlShow = '#'
+
     ): string {
         // Base URL for product images
         $imgUrl = !empty($img)
@@ -63,13 +70,13 @@ if (!function_exists('card')) {
         // Card HTML structure
         return '
             <div class="card">
-                <a href="#" data-toggle="modal" data-target="#show-' . $idProduct . '">
+                <a href="' . $urlShow . '">
                     <img src="' . esc($imgUrl) . '" alt="' . esc($name) . '" class="card-img-top" style="width: 100%; height:25vh;" />
                 </a>
                 <div class="card-body">
                     <h3 class="card-title mb-0">' . esc($name) . '</h3>
                     <p class="card-text mb-0">' . esc(rp($price)) . '</p>
-                    <span class="badge badge-primary badge-pill"><i class="fas fa-tag"></i> ' . esc($category) . '</span>
+                    <a href="' . $urlCategory . '" class="badge badge-primary badge-pill"><i class="fas fa-tag"></i> ' . esc($category) . '</a>
                     <span class="badge badge-success badge-pill"> Tersisa ' . esc($count) . ' Item</span>
                 </div>
             </div>
@@ -130,4 +137,69 @@ if (!function_exists('modal_show')) {
 }
 
 if (!function_exists('add_cart')) {
+    /**
+     * Generate HTML for adding product to cart
+     *
+     * @param int $id Product ID
+     * @param int $quantity Default quantity
+     * @return string HTML for the add-to-cart form
+     */
+    function add_cart(
+        int $id = null,
+    ): string {
+        $action = base_url('/carts/add');
+        $id = esc($id);
+        return  form_open($action, ['method' => 'POST']) . '
+        ' . csrf_field() . '
+        <div class="input-group flex-nowrap">
+            <input type="hidden" value="' . $id . '" name="idproduct" id="idproduct">
+            <input type="number" class="form-control" name="quantity" id="quantity" value="0">
+            <div class="input-group-prepend">
+                <button type="submit" class="btn btn-primary" id="addon-wrapping">
+                    <i class="fas fa-cart-plus"></i>
+                </button>
+             </div>
+        </div>' . form_close();
+    }
+}
+
+if (!function_exists('can')) {
+    function can($role)
+    {
+        $session = Services::session();
+        $userId = $session->get('user_id');
+        if (!$userId) {
+            return false;
+        }
+
+        // Memuat model User
+        $userModel = new User();
+        $user = $userModel->find($userId);
+        if ($user && $user['role'] === $role) {
+            return true;
+        }
+        return false;
+    }
+}
+
+if (!function_exists('guest')) {
+    function guest()
+    {
+        $session = Services::session();
+        return !$session->get('user_id');
+    }
+}
+
+if (!function_exists('auth')) {
+    function auth()
+    {
+        $session = Services::session();
+        $userId = $session->get('user_id');
+        if (!$userId) {
+            return false;
+        }
+
+        $userModel = new User();
+        return $userModel->find($userId) ?: false;
+    }
 }

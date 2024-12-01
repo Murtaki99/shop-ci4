@@ -4,8 +4,10 @@ namespace App\Controllers;
 
 use App\Models\User;
 use Config\Services;
+use App\Controllers\BaseController;
+use CodeIgniter\HTTP\ResponseInterface;
 
-class RegisterController extends BaseController
+class AuthController extends BaseController
 {
     protected $user;
     protected $validation;
@@ -17,15 +19,23 @@ class RegisterController extends BaseController
         $this->validation = Services::validation();
     }
 
-    // Menampilkan Form Pendaftaran
     public function showFormRegister()
     {
         $data = [
             'title' => 'Daftar Akun',
+            'action' => base_url('/register')
         ];
         return view('pages/auth/register', $data);
     }
 
+    public function showFormLogin()
+    {
+        $data = [
+            'title'     => 'Masuk',
+            'action'    => base_url('/login')
+        ];
+        return view('pages/auth/login', $data);
+    }
     public function register()
     {
         $this->validation->setRules([
@@ -57,5 +67,43 @@ class RegisterController extends BaseController
             session()->setFlashdata('error', 'Registrasi gagal. Silakan coba lagi.');
             return redirect()->back()->withInput();
         }
+    }
+
+    public function login()
+    {
+        $this->validation->setRules([
+            'email'     => 'required',
+            'password'  => 'required'
+        ]);
+
+        if (!$this->validation->withRequest($this->request)->run()) {
+            return redirect()->back()->withInput()->with('errors', $this->validation->getErrors());
+        }
+
+        $session    = session();
+        $email      = $this->request->getPost('email');
+        $password   = $this->request->getPost('password');
+        $user       = $this->user->where('email', $email)->first();
+
+        if ($user && password_verify($password, $user['password'])) {
+            $session->set([
+                'user_id'   => $user['id'],
+                'logged_in' => true
+            ]);
+            if ($user['role'] == 'admin') {
+                return redirect()->to('/products')->with('success', 'Login berhasil');
+            } else {
+                return redirect()->to('/')->with('success', 'Login berhasil');
+            }
+        } else {
+            return redirect()->back()->with('error', 'Email & Password tidak ditemuka !');
+        }
+    }
+
+    public function logout()
+    {
+        $session = Services::session();
+        $session->destroy();
+        return redirect()->to(base_url('/login'))->with('success', 'Logout berhasil.');
     }
 }

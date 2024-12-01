@@ -10,7 +10,7 @@
             </div>
             <div class="card-body">
                 <?= form_open($action, ['method' => 'POST', 'enctype' => 'multipart/form-data']) ?>
-
+                <?= csrf_field() ?>
                 <?= form_input(
                     name: 'title',
                     value: old('title') ?? $product['name'],

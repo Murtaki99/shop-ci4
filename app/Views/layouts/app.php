@@ -31,6 +31,13 @@
         .text-green {
             color: #00B140;
         }
+
+        .nav-link .badge {
+            top: 0px;
+            right: -2px;
+            font-size: 0.7rem;
+            /* Adjust the font size for a smaller badge */
+        }
     </style>
 </head>
 
@@ -81,7 +88,7 @@
                         </div>
                     </div>
                     <div class="carousel-item">
-                        <img src="<?= base_url('img/img9.avif') ?>" class="d-block rounded" alt="...">
+                        <img src="<?= base_url('img/img6.avif') ?>" class="d-block rounded" alt="...">
                         <div class="carousel-caption d-none d-md-block">
                             <h5>Third slide label</h5>
                             <p>Some representative placeholder content for the third slide.</p>

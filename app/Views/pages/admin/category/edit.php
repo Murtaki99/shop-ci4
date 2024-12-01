@@ -10,6 +10,7 @@
             </div>
             <div class="card-body">
                 <?= form_open($action, ['method' => 'POST']) ?>
+                <?= csrf_field() ?>
                 <?= form_input(
                     name: 'title',
                     value: old('title') ?? $category['name'],

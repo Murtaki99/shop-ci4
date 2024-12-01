@@ -7,23 +7,34 @@
                 <?= isset($title) ? $title : '' ?>
             </div>
             <div class="card-body">
-                <form>
-                    <div class="form-group">
-                        <label for="email">E-Mail</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan E-Mail Valid">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                    </div>
+                <?= form_open($action, ['method' => 'POST']) ?>
+                <?= csrf_field() ?>
+                <?= form_input(
+                    title: 'E-Mail',
+                    name: 'email',
+                    value: old('email') ?? '',
+                    errors: session('errors.email') ?? '',
+                    type: 'email',
+                    ph: 'Masukkan E-Mail Valid',
+                    attributes: ['required' => 'required']
+                ) ?>
 
-                    <div class="form-group">
-                        <label for="password">Kata Sandi</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan Kata Sandi">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                    </div>
-                    <div class="float-right">
-                        <button type="submit" class="btn btn-primary">Daftar Sekarang
-                        </button>
-                    </div>
-                </form>
+                <?= form_input(
+                    title: 'Kata Sandi',
+                    name: 'password',
+                    value: old('password') ?? '',
+                    errors: session('errors.password') ?? '',
+                    type: 'password',
+                    ph: 'Masukkan kata sandi',
+                    attributes: ['required' => 'required']
+                ) ?>
+
+                <div class="float-right">
+                    <button type="submit" class="btn btn-primary"><?= 'Masuk' ?>
+                        <i class="fas fa-sign-in-alt"></i>
+                    </button>
+                </div>
+                <?= form_close() ?>
             </div>
         </div>
     </div>
