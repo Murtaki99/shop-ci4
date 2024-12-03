@@ -27,7 +27,7 @@ class CartController extends BaseController
     {
         $userId = $this->sessionId->get('user_id');
         $products = $this->cart
-            ->select('carts.*, products.name as product_name, products.price as product_price')
+            ->select('carts.*, products.name as product_name, products.price as product_price, products.image as product_image')
             ->join('products', 'products.id = carts.product_id', 'left')
             ->where('user_id', $userId)
             ->get()
@@ -44,7 +44,6 @@ class CartController extends BaseController
 
         return view('pages/cart/index', $data);
     }
-
 
     public function addcart()
     {
@@ -97,6 +96,35 @@ class CartController extends BaseController
 
         return redirect()->to('/');
     }
+
+    public function upatecart(int $id)
+    {
+        $quantity = $this->request->getPost('quantity');
+        if (!is_numeric($quantity) || $quantity <= 0) {
+            return redirect()->back()->with('error', 'Jumlah harus berupa angka positif.');
+        }
+        $cart = $this->cart->find($id);
+        if (!$cart) {
+            return redirect()->back()->with('error', 'Keranjang tidak ditemukan.');
+        }
+        $product = $this->product->find($cart['product_id']);
+        if (!$product) {
+            return redirect()->back()->with('error', 'Produk tidak ditemukan.');
+        }
+        $productPrice = $product['price'];
+        $subtotal = $productPrice * $quantity;
+        $cartUpdate = [
+            'id'       => $id,
+            'quantity' => $quantity,
+            'subtotal' => $subtotal,
+        ];
+        if ($this->cart->save($cartUpdate)) {
+            return redirect()->to('/carts')->with('success', 'Keranjang berhasil diperbarui!');
+        } else {
+            return redirect()->to('/carts')->with('error', 'Keranjang gagal diperbarui!');
+        }
+    }
+
 
     public function destroy(int $id)
     {

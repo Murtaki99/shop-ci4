@@ -23,26 +23,34 @@
                                 <tr>
                                     <td>
                                         <p>
-                                            <img src="https://placehold.co/50x50">
-                                            <strong><?= esc($product->product_name) ?></strong> <!-- Use object property access -->
+                                            <?php if ($product->product_image): ?>
+                                                <img src="<?= base_url('storage/products/' . $product->product_image) ?>" width="50">
+                                            <?php else: ?>
+                                                <img src="https://placehold.co/50x50">
+                                            <?php endif; ?>
+                                            <strong><?= esc($product->product_name) ?></strong>
                                         </p>
                                     </td>
                                     <td>
-                                        <?= esc(rp($product->product_price)) ?> <!-- Use object property access -->
+                                        <?= esc(rp($product->product_price)) ?>
                                     </td>
                                     <td>
-                                        <form class="input-group flex-nowrap d-flex justify-content-center">
-                                            <input type="number" class="form-control text-center col-md-2" name="jumlah" id="jumlah" value="<?= esc($product->quantity) ?>" readonly>
+                                        <form action="<?= base_url('/carts/update/' . $product->id) ?>" method="POST" class="input-group mb-3">
+                                            <input type="hidden" name="idproduct" value="<?= $product->id; ?>">
+                                            <input type="number" class="form-control col-4" name="quantity" id="quantity" value="<?= esc($product->quantity) ?>">
+                                            <div class="input-group-append">
+                                                <button type="submit" class="input-group-text" id="basic-addon2"><i class="fas fa-check"></i></button>
+                                            </div>
                                         </form>
                                     </td>
                                     <td class="text-center">
-                                        <?= esc(rp($product->subtotal)) ?> <!-- Use object property access -->
+                                        <?= esc(rp($product->subtotal)) ?>
                                     </td>
                                     <td>
                                         <?= btn_delete(
                                             base_url('carts/delete/' . esc($product->id)),
                                             'Produk',
-                                            esc($product->product_name) // Use object property access for product name
+                                            esc($product->product_name)
                                         ) ?>
                                     </td>
                                 </tr>

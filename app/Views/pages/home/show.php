@@ -11,7 +11,7 @@
     <div class="col-md-6">
         <h2 class="card-tite"><?= esc($product['name']) ?></h2>
         <h4 class="card-text mb-0 font-weight-bold"><?= esc(rp($product['price'])) ?></h4>
-        <p class="card-text mb-0"><?= esc(str_limit($product['description'])) ?></p>
+        <p class="card-text mb-0"><?= esc($product['description']) ?></p>
         <a href="<?= base_url('/?category=' . $product['category_slug']) ?>" class="badge badge-primary badge-pill"><i class="fas fa-tag"></i> <?= $product['category_name'] ?></a>
         <span class="badge badge-success badge-pill">Tersisa <?= $product['stocks'] ?> <?= 'Item' ?></span>
         <form class=" my-4 input-group flex-nowrap">

@@ -16,6 +16,7 @@ $routes->get('/product/(:any)', [HomeController::class, 'show']);
 $routes->group('carts', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', [CartController::class, 'index']);
     $routes->post('add', [CartController::class, 'addcart']);
+    $routes->post('update/(:num)', [CartController::class, 'upatecart']);
     $routes->delete('delete/(:num)', [CartController::class, 'destroy']);
 });
 // $routes->get('/register', [RegisterController::class, 'showFormRegister'], ['filter' => 'auth']);

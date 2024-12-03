@@ -105,9 +105,6 @@
                 </button>
             </div>
         <?php else: ?>
-            <div class="alert alert-success" role="alert">
-                This is a success alert—check it out!
-            </div>
         <?php endif; ?>
     </div>
     <main class="container my-5">
