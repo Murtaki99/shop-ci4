@@ -26,7 +26,7 @@
                 <?= esc($user['name']) ?>
             </a>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Profile</a></li>
+                <li><a class="dropdown-item" href="<?= base_url('/profile') ?>">Profile</a></li>
                 <li>
                     <?= form_open(base_url('/logout'), ['method' => 'POST']) ?>
                     <?= csrf_field() ?>

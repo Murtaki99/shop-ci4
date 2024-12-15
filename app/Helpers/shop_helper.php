@@ -203,3 +203,44 @@ if (!function_exists('auth')) {
         return $userModel->find($userId) ?: false;
     }
 }
+
+if (!function_exists('dateID')) {
+    /**
+     * Format tanggal ke format Indonesia
+     *
+     * @param string $date Tanggal dalam format Y-m-d atau Y-m-d H:i:s
+     * @param bool $includeTime Apakah waktu harus disertakan (opsional)
+     * @return string Tanggal dalam format Indonesia
+     */
+    function dateID($date, $includeTime = false)
+    {
+        $bulan = [
+            1 => 'Januari',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember'
+        ];
+
+        $timestamp = strtotime($date);
+        $day = date('d', $timestamp);
+        $month = (int)date('m', $timestamp);
+        $year = date('Y', $timestamp);
+
+        $formattedDate = $day . ' ' . $bulan[$month] . ' ' . $year;
+
+        if ($includeTime) {
+            $time = date('H:i:s', $timestamp);
+            $formattedDate .= ' ' . $time;
+        }
+
+        return $formattedDate;
+    }
+}

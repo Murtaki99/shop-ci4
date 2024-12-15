@@ -67,7 +67,7 @@
                     <a href="<?= base_url('/') ?>" class="btn btn-secondary">
                         <i class="fas fa-angle-left"></i> <?= 'Kembali Belanja' ?>
                     </a>
-                    <a href="#" class="btn btn-success float-right">
+                    <a href="<?= base_url('/checkout') ?>" class="btn btn-success float-right">
                         <?= 'Pembayaran' ?> <i class="fas fa-angle-right"></i>
                     </a>
                 </div>
