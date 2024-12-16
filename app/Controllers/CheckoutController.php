@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\User;
 use Config\Database;
 use Config\Services;
+use Midtrans\Config;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderDetail;
@@ -118,11 +119,7 @@ class CheckoutController extends BaseController
             ];
         }
         $this->orderDetail->insertBatch($orderDetails);
-
-        // Hapus keranjang setelah checkout
         $this->cart->where('user_id', $userId)->delete();
-
-        // Commit atau rollback transaksi
         if ($db->transComplete()) {
             session()->setFlashdata('success', 'Checkout berhasil, Silahkan melakukan pembayaran!');
             return redirect()->to(base_url('/checkout/payment'));
@@ -134,6 +131,11 @@ class CheckoutController extends BaseController
 
     public function payment()
     {
+        Config::$serverKey = 'SB-Mid-server-4WzXNkKUx9DcZ6U7KooKXyBO';
+        Config::$isProduction = false;
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
+
         $userId = $this->sessionId->get('user_id');
         $order = $this->order->where('id_user', $userId)->orderBy('date', 'desc')->first();
 
@@ -141,11 +143,46 @@ class CheckoutController extends BaseController
             return redirect()->to('/')->with('error', 'Tidak ada pesanan ditemukan!');
         }
 
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => $order['invoice'],
+                'gross_amount' => intval($order['total']),
+            ),
+            'customer_details' => [
+                'first_name' => $order['name'],
+                'last_name' => '',
+                'email' => 'murtakibangko@gmail.com',
+                'phone' => $order['phone'],
+                'billing_address' => [
+                    'address' => $order['address'],
+                    // 'city' => 'Jakarta',
+                    // 'postal_code' => '12345', 
+                    // 'country_code' => 'IDN',
+                ],
+            ],
+        );
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
         $data = [
             'title' => 'Checkout Berhasil',
             'order' => $order,
+            'snapToken' => $snapToken
         ];
 
         return view('pages/checkout/payment', $data);
+    }
+
+    public function paid(string $inv)
+    {
+        $order = $this->order->where('invoice', $inv)->first();
+        if (!$order) {
+            return redirect()->back()->with('error', 'Order not found');
+        }
+        $updateOrder = [
+            'id' => $order['id'],
+            'status' => 'paid'
+        ];
+        $this->order->save($updateOrder);
+        return redirect()->to(base_url('myorders'))->with('success', 'Pembayaran berhasil dilakukan.');
     }
 }

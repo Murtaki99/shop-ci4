@@ -5,29 +5,26 @@ namespace App\Controllers;
 use App\Models\User;
 use Config\Services;
 use App\Controllers\BaseController;
-use App\Models\Order;
-use App\Models\OrderDetail;
-use CodeIgniter\HTTP\ResponseInterface;
+// use CodeIgniter\HTTP\ResponseInterface;
 
 class UserController extends BaseController
 {
     protected $user;
+    protected $userId;
     protected $sessionId;
-    protected $order;
-    protected $orderDetail;
+    protected $validation;
 
     public function __construct()
     {
         $this->sessionId    = Services::session();
+        $this->validation = Services::validation();
         $this->user         = new User();
-        $this->order       = new Order();
-        $this->orderDetail  = new OrderDetail();
+        $this->userId = $this->sessionId->get('user_id');
     }
 
     public function index()
     {
-        $userId = $this->sessionId->get('user_id');
-        $user = $this->user->where('id', $userId)->first();
+        $user = $this->user->where('id', $this->userId)->first();
         $data = [
             'title' => 'Profile',
             'user'  => $user
@@ -35,37 +32,78 @@ class UserController extends BaseController
         return view('/pages/profile/index', $data);
     }
 
-    public function myorders()
+    public function edit()
     {
-        $userId = $this->sessionId->get('user_id');
-        $orders = $this->order->where('id_user', $userId)->orderBy('id', 'desc')->get()->getResult();
+        $user = $this->user->where('id', $this->userId)->first();
         $data = [
-            'title' => 'Daftar Pesanan',
-            'orders'  => $orders
+            'title' => 'Ubah Profile',
+            'user'  => $user,
+            'action' => base_url('/profile/update')
         ];
-        return view('/pages/profile/myorders', $data);
+        return view('/pages/profile/edit', $data);
     }
 
-    public function detail(int $id)
+    public function update()
     {
-        $order = $this->order->where('id', $id)->first();
+        $user = $this->user->where('id', $this->userId)->first();
+        $this->validation->setRules([
+            'name'          => 'required|max_length[255]',
+            'email'         => 'required|min_length[3]|max_length[255]|is_unique[users.email,id,' . $user['id'] . ']',
+            'image'         => 'permit_empty|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/png]|max_size[image,2048]',
+        ]);
+        $imageName = $user['image'] ?? null;
 
-        if (!$order) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Pesanan tidak ditemukan.');
+        $image = $this->request->getFile('image');
+        if ($image && $image->isValid() && !$image->hasMoved()) {
+            if (!empty($user['image']) && file_exists('storage/users/' . $user['image'])) {
+                unlink('storage/users/' . $user['image']);
+            }
+            $imageName = $image->getRandomName();
+            $image->move('storage/users', $imageName);
         }
-
-        $details = $this->orderDetail
-            ->select('order_details.*, products.name as product_name, products.price as product_price, products.image as product_image')
-            ->join('products', 'products.id = order_details.id_product', 'left')
-            ->where('id_order', $order['id'])
-            ->findAll();
-
-        $data = [
-            'title'   => 'Detail Pesanan: ',
-            'order'   => $order,
-            'details' => $details,
+        $updateUser = [
+            'id'        => $user['id'],
+            'name'      => $this->request->getPost('name'),
+            'email'     => $this->request->getPost('email'),
+            'image'     => $imageName
         ];
+        if ($this->user->save($updateUser)) {
+            session()->setFlashdata('success', 'Profile berhasil diubah!');
+            return redirect()->to('/profile');
+        } else {
+            session()->setFlashdata('error', 'Profile gagal diubah');
+            return redirect()->to('/profile/edit');
+        }
+    }
 
-        return view('/pages/profile/detail-myorder', $data);
+    public function updatePassword()
+    {
+        $user = $this->user->where('id', $this->userId)->first();
+        $data = [
+            'title' => 'Ubah Kata Sandi',
+            'user'  => $user,
+            'action' => base_url('profile/update-password')
+        ];
+        if ($this->request->getMethod() === 'POST') {
+            $this->validation->setRules([
+                'oldpassword' => 'required|min_length[8]',
+                'newpassword' => 'required|min_length[8]|differs[oldpassword]',
+                'password_confirmed' => 'required|matches[newpassword]',
+            ]);
+
+            if (!$this->validation->withRequest($this->request)->run()) {
+                return redirect()->to(base_url('profile/update-password'))->withInput()->with('errors', $this->validation->getErrors());
+            }
+            $oldPassword = $this->request->getPost('oldpassword');
+            $newPassword = $this->request->getPost('newpassword');
+            if (!password_verify($oldPassword, $user['password'])) {
+                return redirect()->to(base_url('profile/update-password'))->with('errors', ['oldpassword' => 'Kata sandi lama tidak sesuai'])->withInput();
+            }
+            $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+            $this->user->update($this->userId, ['password' => $newPasswordHash]);
+            return redirect()->to(base_url('profile'))->with('success', 'Kata sandi berhasil diubah.');
+        } else {
+            return view('pages/profile/update_password', $data);
+        }
     }
 }

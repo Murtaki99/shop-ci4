@@ -24,7 +24,7 @@
                             <?php foreach ($orders as $order): ?>
                                 <tr>
                                     <td>
-                                        <a href="<?= base_url('/myorders/detail/'. $order->id) ?>"> <?= esc($order->invoice) ?></a>
+                                        <a href="<?= base_url('/myorders/detail/'. $order->invoice) ?>"> <?= esc($order->invoice) ?></a>
                                     </td>
                                     <td>
                                         <?= esc(dateID($order->date)) ?>

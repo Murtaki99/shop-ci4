@@ -13,19 +13,27 @@
             <div class="card-body">
                 <div class="row mb-5">
                     <div class="col-md-4 text-center">
-                        <img src="https://placehold.co/200x200">
+                        <?php if (!empty($user['image'])) : ?>
+                            <a href="<?= base_url('storage/users/' . $user['image']) ?>" data-lightbox="user-gallery" data-title="<?= esc($user['name']) ?>">
+                                <img src="<?= base_url('storage/users/' . $user['image']) ?>" alt="<?= esc($user['name']) ?>" width="200" height="200">
+                            </a>
+                        <?php else : ?>
+                            <img src="https://placehold.co/200x200">
+                        <?php endif; ?>
                     </div>
                     <div class="col-md-8">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Nama: Murtaki</li>
-                            <li class="list-group-item">Email: murtakibangko@gmail.com</li>
-                            <li class="list-group-item">Telepone: 082279761815</li>
+                            <li class="list-group-item">Nama: <?= $user['name'] ?></li>
+                            <li class="list-group-item">Email: <?= $user['email'] ?></li>
                         </ul>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">
-                    Edit
-                </button>
+                <a href="<?= base_url('profile/edit') ?>" class="btn btn-primary">
+                    Ubah
+                </a>
+                <a href="<?= base_url('profile/update-password') ?>" class="btn btn-secondary">
+                    Ganti Sandi
+                </a>
             </div>
         </div>
     </div>

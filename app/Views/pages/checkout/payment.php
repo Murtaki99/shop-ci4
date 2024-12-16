@@ -36,8 +36,44 @@
                 <a href="<?= base_url('/') ?>" class="btn btn-secondary">
                     <i class="fas fa-angle-left"></i> Kembali
                 </a>
+                <button type="button" id="pay-button" class="btn btn-success float-right">
+                    <i class="fas fa-wallet"></i> Bayar Sekarang
+                </button>
             </div>
         </div>
     </div>
 </div>
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-sNPRgIFpxZ8JJAQK"></script>
+<script>
+    document.getElementById('pay-button').onclick = function() {
+        // SnapToken acquired from previous step
+        snap.pay('<?= $snapToken ?>', {
+            // Callback ketika pembayaran berhasil
+            onSuccess: function(result) {
+                window.location.href = "<?= base_url('checkout/paid/' . $order['invoice']) ?>";
+            },
+            // Callback ketika pembayaran pending
+            onPending: function(result) {
+                swal({
+                    title: "Menunggu Pembayaran!",
+                    text: "Pembayaran Anda sedang diproses. Silakan selesaikan pembayaran.",
+                    icon: "warning",
+                }).then(() => {
+                    window.location.href = "<?= base_url('checkout/payment') ?>";
+                });
+            },
+            // Callback ketika pembayaran gagal
+            onError: function(result) {
+                swal({
+                    title: "Gagal!",
+                    text: "Terjadi kesalahan saat memproses pembayaran. Silakan coba lagi.",
+                    icon: "error",
+                }).then(() => {
+                    window.location.href = "<?= base_url('checkout/payment') ?>";
+                });
+            },
+        });
+    };
+</script>
+
 <?= $this->endSection(); ?>

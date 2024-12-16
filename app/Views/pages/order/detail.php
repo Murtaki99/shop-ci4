@@ -61,9 +61,9 @@
                 </table>
             </div>
             <div class="card-footer">
-                <button class="btn btn-success">
+                <a href="<?= base_url('checkout/payment') ?>" class="btn btn-success">
                     Konfirmasi Pembayaran
-                </button>
+                </a>
             </div>
         </div>
     </div>

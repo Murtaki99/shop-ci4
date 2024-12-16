@@ -8,11 +8,13 @@ use App\Controllers\AdminCategoryController;
 use App\Controllers\AuthController;
 use App\Controllers\CartController;
 use App\Controllers\CheckoutController;
+use App\Controllers\MyOrderController;
 use App\Controllers\UserController;
 
 /**
  * @var RouteCollection $routes
  */
+
 $routes->get('/', [HomeController::class, 'index']);
 $routes->get('/product/(:any)', [HomeController::class, 'show']);
 $routes->group('carts', ['filter' => 'auth'], function ($routes) {
@@ -26,16 +28,23 @@ $routes->group('checkout', ['filter' => 'auth'], function ($routes) {
     $routes->get('/', [CheckoutController::class, 'index']);
     $routes->post('store', [CheckoutController::class, 'store']);
     $routes->get('payment', [CheckoutController::class, 'payment']);
-});
-$routes->group('profile', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', [UserController::class, 'index']);
-    $routes->post('store', [UserController::class, 'store']);
-    $routes->get('payment', [UserController::class, 'payment']);
+    $routes->get('paid/(:any)', [CheckoutController::class, 'paid']);
 });
 
+
+$routes->group('profile', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', [UserController::class, 'index']);
+    $routes->get('edit', [UserController::class, 'edit']);
+    $routes->post('update', [UserController::class, 'update']);
+    // Perbaikan rute berikut untuk update-password
+    $routes->get('update-password', [UserController::class, 'updatePassword']);
+    $routes->post('update-password', [UserController::class, 'updatePassword']);
+});
+
+
 $routes->group('myorders', ['filter' => 'auth'], function ($routes) {
-    $routes->get('/', [UserController::class, 'myorders']);
-    $routes->get('detail/(:num)', [UserController::class, 'detail']);
+    $routes->get('/', [MyOrderController::class, 'index']);
+    $routes->get('detail/(:any)', [MyOrderController::class, 'detail']);
 });
 
 // $routes->get('/register', [RegisterController::class, 'showFormRegister'], ['filter' => 'auth']);
